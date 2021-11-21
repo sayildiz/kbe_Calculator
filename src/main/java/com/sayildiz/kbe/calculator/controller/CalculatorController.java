@@ -16,6 +16,7 @@ public class CalculatorController {
 
     @PostMapping("/tax")
     Price calculateTax(@RequestBody double netPrice){
+        calculatorService.checkPrecision(netPrice);
         return calculatorService.calculateVAT(netPrice);
     }
 
