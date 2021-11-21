@@ -9,6 +9,6 @@ import java.math.BigDecimal;
 public interface CalculatorService {
     BigDecimal VAT = BigDecimal.valueOf(19.); // germany tax 19%
 
-    Price calculateVAT(double price);
-    void checkPrecision(double price) throws TooManyDecimalsException;
+    Price calculateVAT(BigDecimal price);
+    void checkPrecision(BigDecimal price) throws TooManyDecimalsException;
 }

@@ -7,6 +7,8 @@ import com.sayildiz.kbe.calculator.service.VATCalculatorService;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CalculatorServiceTest {
@@ -19,7 +21,7 @@ public class CalculatorServiceTest {
         double expectedVAT = 2.94;
         double gross = price + expectedVAT;
         Price expectedPrice = new Price(gross, expectedVAT, price);
-        assertEquals(expectedPrice, service.calculateVAT(price));
+        assertEquals(expectedPrice, service.calculateVAT(BigDecimal.valueOf(price)));
     }
 
     @Test
@@ -28,7 +30,7 @@ public class CalculatorServiceTest {
         double expectedTax = 2.53;
         double gross = price + expectedTax;
         Price expectedPrice = new Price(gross, expectedTax, price);
-        assertEquals(expectedPrice, service.calculateVAT(price));
+        assertEquals(expectedPrice, service.calculateVAT(BigDecimal.valueOf(price)));
     }
 
     @Test
@@ -37,13 +39,13 @@ public class CalculatorServiceTest {
         double expectedTax = 335.73;
         double gross = price + expectedTax;
         Price expectedPrice = new Price(gross, expectedTax, price);
-        assertEquals(expectedPrice, service.calculateVAT(price));
+        assertEquals(expectedPrice, service.calculateVAT(BigDecimal.valueOf(price)));
     }
 
     @Test
     public void testCheckDecimalWith3Decimals(){
         double price = 3.123;
-        Exception exception = assertThrows(TooManyDecimalsException.class, () -> service.checkPrecision(price));
+        Exception exception = assertThrows(TooManyDecimalsException.class, () -> service.checkPrecision(BigDecimal.valueOf(price)));
 
         String expectedMessage = tooManyDecimalMessage + price;
         String actualMessage = exception.getMessage();
@@ -53,7 +55,7 @@ public class CalculatorServiceTest {
     @Test
     public void testCheckDecimalWith5Decimals(){
         double price = 3.12366;
-        Exception exception = assertThrows(TooManyDecimalsException.class, () -> service.checkPrecision(price));
+        Exception exception = assertThrows(TooManyDecimalsException.class, () -> service.checkPrecision(BigDecimal.valueOf(price)));
 
         String expectedMessage = tooManyDecimalMessage + price;
         String actualMessage = exception.getMessage();
@@ -63,18 +65,18 @@ public class CalculatorServiceTest {
     @Test
     public void testCheckDecimalWithNoDecimals(){
         double price = 3.;
-        service.checkPrecision(price);
+        service.checkPrecision(BigDecimal.valueOf(price));
     }
 
     @Test
     public void testCheckDecimalWithOneDecimals(){
         double price = 325.1;
-        service.checkPrecision(price);
+        service.checkPrecision(BigDecimal.valueOf(price));
     }
 
     @Test
     public void testCheckDecimalWithTwoDecimals(){
         double price = 334.77;
-        service.checkPrecision(price);
+        service.checkPrecision(BigDecimal.valueOf(price));
     }
 }
