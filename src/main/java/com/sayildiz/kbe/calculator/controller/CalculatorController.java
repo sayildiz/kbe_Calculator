@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 @RestController
 public class CalculatorController {
     private final CalculatorService calculatorService;
@@ -15,7 +17,7 @@ public class CalculatorController {
     }
 
     @PostMapping("/tax")
-    Price calculateTax(@RequestBody double netPrice){
+    Price calculateTax(@RequestBody BigDecimal netPrice){
         calculatorService.checkPrecision(netPrice);
         return calculatorService.calculateVAT(netPrice);
     }

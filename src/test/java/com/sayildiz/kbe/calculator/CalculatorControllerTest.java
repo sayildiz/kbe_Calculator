@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.math.BigDecimal;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doThrow;
@@ -43,7 +45,7 @@ public class CalculatorControllerTest {
                 .content(Double.toString(expectedPrice.getNet()))
                 .contentType(MediaType.APPLICATION_JSON);
 
-        when(mockService.calculateVAT(35)).thenReturn(expectedPrice);
+        when(mockService.calculateVAT(BigDecimal.valueOf(35.0))).thenReturn(expectedPrice);
 
         this.mockController.perform(request).
                 andDo(print())
@@ -55,11 +57,11 @@ public class CalculatorControllerTest {
 
     @Test
     public void checkPrecisionTest() throws Exception{
-        double price = 35.1234;
+        BigDecimal price = BigDecimal.valueOf(35.1234);
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/tax")
                 .accept(MediaType.APPLICATION_JSON)
-                .content(Double.toString(price))
+                .content(price.toString())
                 .contentType(MediaType.APPLICATION_JSON);
         doThrow(new TooManyDecimalsException(price)).when(mockService).checkPrecision(price);
         this.mockController.perform(request).
