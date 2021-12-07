@@ -56,6 +56,24 @@ public class CalculatorControllerTest {
     }
 
     @Test
+    public void VATCalculationTestWithBigNumbers() throws Exception{
+        Price expectedPrice = new Price(BigDecimal.valueOf(6054295567.19), BigDecimal.valueOf(966652233.42), BigDecimal.valueOf(5087643333.77));
+        RequestBuilder request = MockMvcRequestBuilders
+                .post("/tax")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(expectedPrice.getNet().toPlainString())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        when(mockService.calculateVAT(BigDecimal.valueOf(5087643333.77))).thenReturn(expectedPrice);
+
+        this.mockController.perform(request).
+                andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.net", is(5087643333.77)))
+                .andExpect(jsonPath("$.gross", is(6054295567.19)))
+                .andExpect(jsonPath("$.vat", is(966652233.42)));
+    }
+    @Test
     public void checkPrecisionTest() throws Exception{
         BigDecimal price = BigDecimal.valueOf(35.1234);
         RequestBuilder request = MockMvcRequestBuilders
