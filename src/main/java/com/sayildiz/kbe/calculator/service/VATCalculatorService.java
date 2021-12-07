@@ -16,9 +16,9 @@ public class VATCalculatorService implements CalculatorService{
     @Override
     public Price calculateVAT(BigDecimal price) {
         BigDecimal bigVAT = price.multiply(VAT).divide(BigDecimal.valueOf(100));
-        double vat = bigVAT.setScale(2, RoundingMode.HALF_UP).doubleValue() ;
-        double gross = bigVAT.add(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        double roundedPrice = price.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        BigDecimal vat = bigVAT.setScale(2, RoundingMode.HALF_UP) ;
+        BigDecimal gross = bigVAT.add(price).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal roundedPrice = price.setScale(2, RoundingMode.HALF_UP);
         return new Price(gross, vat, roundedPrice);
     }
 
