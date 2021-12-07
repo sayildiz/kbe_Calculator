@@ -15,7 +15,7 @@ public class VATCalculatorService implements CalculatorService{
 
     @Override
     public Price calculateVAT(BigDecimal price) {
-        BigDecimal bigVAT = price.multiply(VAT).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+        BigDecimal bigVAT = price.multiply(VAT).divide(BigDecimal.valueOf(100));
         double vat = bigVAT.setScale(2, RoundingMode.HALF_UP).doubleValue() ;
         double gross = bigVAT.add(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
         double roundedPrice = price.setScale(2, RoundingMode.HALF_UP).doubleValue();
@@ -24,7 +24,7 @@ public class VATCalculatorService implements CalculatorService{
 
     @Override
     public void checkPrecision(BigDecimal price) throws TooManyDecimalsException {
-        Pattern pattern = Pattern.compile("^\\d*.\\d\\d{0,1}$");
+        Pattern pattern = Pattern.compile("^\\d*.\\d\\d{0,1}$|^\\d$");
         Matcher matcher = pattern.matcher(price.toString());
         if(!matcher.find()) throw new TooManyDecimalsException(price);
     }

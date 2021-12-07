@@ -34,12 +34,34 @@ public class CalculatorServiceTest {
     }
 
     @Test
+    public void testTaxSingleValue(){
+        double price = 5;
+        double expectedTax = 0.95;
+        double gross = price + expectedTax;
+        Price expectedPrice = new Price(gross, expectedTax, price);
+        assertEquals(expectedPrice, service.calculateVAT(BigDecimal.valueOf(price)));
+    }
+
+    @Test
     public void testTax3(){
         double price = 1767;
         double expectedTax = 335.73;
         double gross = price + expectedTax;
         Price expectedPrice = new Price(gross, expectedTax, price);
         assertEquals(expectedPrice, service.calculateVAT(BigDecimal.valueOf(price)));
+    }
+
+    @Test
+    public void testTax4(){
+        double price = 5;
+        double priceDecimal = 5.0;
+        double expectedTax = 0.95;
+        double gross = price + expectedTax;
+        Price expectedPrice = new Price(gross, expectedTax, price);
+        Price expectedDecimalPrice = new Price(gross ,expectedTax, price);
+        assertEquals(expectedPrice, service.calculateVAT(BigDecimal.valueOf(price)));
+        assertEquals(expectedDecimalPrice, service.calculateVAT(BigDecimal.valueOf(priceDecimal)));
+
     }
 
     @Test
