@@ -38,11 +38,11 @@ public class CalculatorControllerTest {
 
     @Test
     public void VATCalculationTest() throws Exception{
-        Price expectedPrice = new Price(41.65, 6.65, 35.0);
+        Price expectedPrice = new Price(BigDecimal.valueOf(41.65), BigDecimal.valueOf(6.65), BigDecimal.valueOf(35.0));
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/tax")
                 .accept(MediaType.APPLICATION_JSON)
-                .content(Double.toString(expectedPrice.getNet()))
+                .content(expectedPrice.getNet().toPlainString())
                 .contentType(MediaType.APPLICATION_JSON);
 
         when(mockService.calculateVAT(BigDecimal.valueOf(35.0))).thenReturn(expectedPrice);

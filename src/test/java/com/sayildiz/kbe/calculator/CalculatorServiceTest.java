@@ -8,6 +8,7 @@ import com.sayildiz.kbe.calculator.service.VATCalculatorService;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,57 +18,57 @@ public class CalculatorServiceTest {
 
     @Test
     public void testVATCalculation1(){
-        double price = 15.49;
-        double expectedVAT = 2.94;
-        double gross = price + expectedVAT;
+        BigDecimal price = BigDecimal.valueOf(15.49);
+        BigDecimal expectedVAT = BigDecimal.valueOf(2.94);
+        BigDecimal gross = price.add(expectedVAT);
         Price expectedPrice = new Price(gross, expectedVAT, price);
-        assertEquals(expectedPrice, service.calculateVAT(BigDecimal.valueOf(price)));
+        assertEquals(expectedPrice, service.calculateVAT(price));
     }
 
     @Test
     public void testTax2(){
-        double price = 13.33;
-        double expectedTax = 2.53;
-        double gross = price + expectedTax;
-        Price expectedPrice = new Price(gross, expectedTax, price);
-        assertEquals(expectedPrice, service.calculateVAT(BigDecimal.valueOf(price)));
+        BigDecimal price = BigDecimal.valueOf(13.33);
+        BigDecimal expectedVAT = BigDecimal.valueOf(2.53);
+        BigDecimal gross = price.add(expectedVAT);
+        Price expectedPrice = new Price(gross, expectedVAT, price);
+        assertEquals(expectedPrice, service.calculateVAT(price));
     }
 
     @Test
     public void testTaxSingleValue(){
-        double price = 5;
-        double expectedTax = 0.95;
-        double gross = price + expectedTax;
-        Price expectedPrice = new Price(gross, expectedTax, price);
-        assertEquals(expectedPrice, service.calculateVAT(BigDecimal.valueOf(price)));
+        BigDecimal price = BigDecimal.valueOf(5).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal expectedVAT = BigDecimal.valueOf(0.95).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal gross = price.add(expectedVAT).setScale(2, RoundingMode.HALF_UP);
+        Price expectedPrice = new Price(gross, expectedVAT, price);
+        assertEquals(expectedPrice, service.calculateVAT(price));
     }
 
     @Test
     public void testTax3(){
-        double price = 1767;
-        double expectedTax = 335.73;
-        double gross = price + expectedTax;
-        Price expectedPrice = new Price(gross, expectedTax, price);
-        assertEquals(expectedPrice, service.calculateVAT(BigDecimal.valueOf(price)));
+        BigDecimal price = BigDecimal.valueOf(1767).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal expectedVAT = BigDecimal.valueOf(335.73).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal gross = price.add(expectedVAT).setScale(2, RoundingMode.HALF_UP);
+        Price expectedPrice = new Price(gross, expectedVAT, price);
+        assertEquals(expectedPrice, service.calculateVAT(price));
     }
 
     @Test
     public void testTax4(){
-        double price = 5;
-        double priceDecimal = 5.0;
-        double expectedTax = 0.95;
-        double gross = price + expectedTax;
-        Price expectedPrice = new Price(gross, expectedTax, price);
-        Price expectedDecimalPrice = new Price(gross ,expectedTax, price);
-        assertEquals(expectedPrice, service.calculateVAT(BigDecimal.valueOf(price)));
-        assertEquals(expectedDecimalPrice, service.calculateVAT(BigDecimal.valueOf(priceDecimal)));
+        BigDecimal price = BigDecimal.valueOf(5).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal priceDecimal = BigDecimal.valueOf(5.0).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal expectedVAT = BigDecimal.valueOf(0.95).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal gross = price.add(expectedVAT).setScale(2, RoundingMode.HALF_UP);
+        Price expectedPrice = new Price(gross, expectedVAT, price);
+        Price expectedDecimalPrice = new Price(gross ,expectedVAT, price);
+        assertEquals(expectedPrice, service.calculateVAT(price));
+        assertEquals(expectedDecimalPrice, service.calculateVAT(priceDecimal));
 
     }
 
     @Test
     public void testCheckDecimalWith3Decimals(){
-        double price = 3.123;
-        Exception exception = assertThrows(TooManyDecimalsException.class, () -> service.checkPrecision(BigDecimal.valueOf(price)));
+        BigDecimal price = BigDecimal.valueOf(3.123);
+        Exception exception = assertThrows(TooManyDecimalsException.class, () -> service.checkPrecision(price));
 
         String expectedMessage = tooManyDecimalMessage + price;
         String actualMessage = exception.getMessage();
@@ -76,8 +77,8 @@ public class CalculatorServiceTest {
 
     @Test
     public void testCheckDecimalWith5Decimals(){
-        double price = 3.12366;
-        Exception exception = assertThrows(TooManyDecimalsException.class, () -> service.checkPrecision(BigDecimal.valueOf(price)));
+        BigDecimal price = BigDecimal.valueOf(3.12366);
+        Exception exception = assertThrows(TooManyDecimalsException.class, () -> service.checkPrecision(price));
 
         String expectedMessage = tooManyDecimalMessage + price;
         String actualMessage = exception.getMessage();
@@ -86,19 +87,19 @@ public class CalculatorServiceTest {
 
     @Test
     public void testCheckDecimalWithNoDecimals(){
-        double price = 3.;
-        service.checkPrecision(BigDecimal.valueOf(price));
+        BigDecimal price = BigDecimal.valueOf(3.);
+        service.checkPrecision(price);
     }
 
     @Test
     public void testCheckDecimalWithOneDecimals(){
-        double price = 325.1;
-        service.checkPrecision(BigDecimal.valueOf(price));
+        BigDecimal price = BigDecimal.valueOf(325.1);
+        service.checkPrecision(price);
     }
 
     @Test
     public void testCheckDecimalWithTwoDecimals(){
-        double price = 334.77;
-        service.checkPrecision(BigDecimal.valueOf(price));
+        BigDecimal price = BigDecimal.valueOf(334.77);
+        service.checkPrecision(price);
     }
 }
