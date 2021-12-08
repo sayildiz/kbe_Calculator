@@ -16,9 +16,9 @@ public class CalculatorController {
         this.calculatorService = calculatorService;
     }
 
-    @PostMapping("/tax")
+    @PostMapping("/vat")
     Price calculateTax(@RequestBody BigDecimal netPrice){
-        calculatorService.checkPrecision(netPrice);
+        calculatorService.checkPrecisionHasTwoDecimals(netPrice);
         return calculatorService.calculateVAT(netPrice);
     }
 
