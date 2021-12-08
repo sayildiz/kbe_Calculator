@@ -40,7 +40,7 @@ public class CalculatorControllerTest {
     public void VATCalculationTest() throws Exception{
         Price expectedPrice = new Price(BigDecimal.valueOf(41.65), BigDecimal.valueOf(6.65), BigDecimal.valueOf(35.0));
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/tax")
+                .post("/vat")
                 .accept(MediaType.APPLICATION_JSON)
                 .content(expectedPrice.getNet().toPlainString())
                 .contentType(MediaType.APPLICATION_JSON);
@@ -59,7 +59,7 @@ public class CalculatorControllerTest {
     public void VATCalculationTestWithBigNumbers() throws Exception{
         Price expectedPrice = new Price(BigDecimal.valueOf(6054295567.19), BigDecimal.valueOf(966652233.42), BigDecimal.valueOf(5087643333.77));
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/tax")
+                .post("/vat")
                 .accept(MediaType.APPLICATION_JSON)
                 .content(expectedPrice.getNet().toPlainString())
                 .contentType(MediaType.APPLICATION_JSON);
@@ -79,11 +79,11 @@ public class CalculatorControllerTest {
     public void checkPrecisionTest() throws Exception{
         BigDecimal price = BigDecimal.valueOf(35.1234);
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/tax")
+                .post("/vat")
                 .accept(MediaType.APPLICATION_JSON)
                 .content(price.toString())
                 .contentType(MediaType.APPLICATION_JSON);
-        doThrow(new TooManyDecimalsException(price)).when(mockService).checkPrecision(price);
+        doThrow(new TooManyDecimalsException(price)).when(mockService).checkPrecisionHasTwoDecimals(price);
         this.mockController.perform(request).
                 andDo(print())
                 .andExpect(status().isBadRequest())
