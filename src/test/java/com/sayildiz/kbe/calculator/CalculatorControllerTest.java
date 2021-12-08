@@ -69,9 +69,11 @@ public class CalculatorControllerTest {
         this.mockController.perform(request).
                 andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.net", is(5087643333.77)))
                 .andExpect(jsonPath("$.gross", is(6054295567.19)))
-                .andExpect(jsonPath("$.vat", is(966652233.42)));
+                .andExpect(jsonPath("$.vat", is(966652233.42)))
+                .andExpect(jsonPath("$.net", is(5087643333.77)))
+                .andExpect(content().string("{\"gross\":6054295567.19,\"vat\":966652233.42,\"net\":5087643333.77}"));
+
     }
     @Test
     public void checkPrecisionTest() throws Exception{
