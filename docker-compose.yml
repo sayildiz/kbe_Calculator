@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  calculator:
+    container_name: calculator
+    command: java -jar target/demo-0.0.1-SNAPSHOT.jar
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    ports:
+      - "56667:56667"
+    environment:
+      - server.port=56667
+      # - spring.rabbitmq.host=rabbitmq
+      # - spring.rabbitmq.port=5672
+      # - spring.rabbitmq.username=guest
+      # - spring.rabbitmq.password=guest
+    volumes:
+      - ./:/app/app
+    # networks:
+    #   - rabbitclient_default
+
+  # calculator2:
+  #   container_name: calculator2
+  #   command: java -jar target/demo-0.0.1-SNAPSHOT.jar
+  #   build:
+  #     context: .
+  #     dockerfile: .docker/Dockerfile
+  #   ports:
+  #     - "56668:56668"
+  #   environment:
+  #     - server.port=56668
+  #     - spring.rabbitmq.host=rabbitmq
+  #     - spring.rabbitmq.port=5672
+  #     - spring.rabbitmq.username=guest
+  #     - spring.rabbitmq.password=guest
+  #   volumes:
+  #     - ./:/app/app
+  #   networks:
+  #     - rabbitclient_default
+
+# networks:
+#   rabbitclient_default:
+#     external: true
+
+networks:
+  default:
+    external:
+      name: myNetwork
