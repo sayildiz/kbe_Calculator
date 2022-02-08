@@ -7,7 +7,7 @@
 #### Create Network in Docker
 
 ```
-docker network myNetwork
+docker network create myNetwork
 ```
 
 then run in projectFolder of each microService
